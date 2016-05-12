@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <script type="text/javascript">
+    /* ====================== Globals =================== */
+    $ = function(selector) {
+      result = document.querySelectorAll(selector);
+      if (result.length)
+        return result[0];
+      else
+        return undefined;
+    }
+    $$ = function(selector) {
+      return document.querySelectorAll(selector);
+    }
+    var bounds = [ 40, 38, 685, 757 ];
+    var speed = 2;
+    var coords = {
+      pacman: new Character( 361, 604),
+      inky  : new Character(   0,   0),
+      blinky: new Character(   0,   0),
+      pinky : new Character(   0,   0),
+      clyde : new Character(   0,   0)
+    }
+
+    /* ====================== Character ================= */
+    function Character(x, y) {
+      this.x = x;
+      this.y = y;
+      this.dx = 0;
+      this.dy = 0;
+      return this;
+    }
+
+    /* ====================== Input ===================== */
+
+    function Input(up, down, left, right) {
+      if (up)
+        this.up = up;
+      if (down)
+        this.down = down;
+      if (left)
+        this.left = left;
+      if (right)
+        this.right = right;
+      return this;
+    }
+
+    Input.prototype.keys = {};
+    Input.prototype.up    = 38;
+    Input.prototype.down  = 40;
+    Input.prototype.left  = 37;
+    Input.prototype.right = 39;
+
+    Input.prototype.filter = function(coords) {
+      var returnvalue = {}
+      returnvalue.up    = this.keys.up;
+      returnvalue.down  = this.keys.down;
+      returnvalue.left  = this.keys.left;
+      returnvalue.right = this.keys.right;
+      if (!((coords.x - 36) % 26)) {
+        returnvalue.up = false;
+        returnvalue.down = false;
+      }
+      if (!((coords.y - 34) % 26)) {
+        returnvalue.left = false;
+        returnvalue.right = false;
+      }
+      return returnvalue;
+    }
+
+    Input.prototype.pressed = function(pressed) {
+      if (pressed == this.up)
+        this.keys.up    = true;
+      if (pressed == this.down)
+        this.keys.down  = true;
+      if (pressed == this.left)
+        this.keys.left  = true;
+      if (pressed == this.right)
+        this.keys.right = true;
+    }
+
+    Input.prototype.released = function(released) {
+      if (released == this.up)
+        this.keys.up    = false;
+      if (released == this.down)
+        this.keys.down  = false;
+      if (released == this.left)
+        this.keys.left  = false;
+      if (released == this.right)
+        this.keys.right = false;
+    }
+
+    /* ================== Mainloop ====================== */
+
+    function mainloop() {
+      var pacman = $("#pacman");
+      var keys = input.filter(coords.pacman);
+      if (keys.up) {
+        coords.pacman.y -= speed;
+        coords.pacman.dy = -speed;
+        pacman.style.transform = "rotate(270deg)";
+      } else if (keys.down) {
+        coords.pacman.y += speed;
+        coords.pacman.dy = speed;
+        pacman.style.transform = "rotate(90deg)";
+      } else {
+        coords.pacman.dy = 0;
+
+        if (keys.left) {
+          coords.pacman.x -= speed;
+          coords.pacman.dx = -speed;
+          pacman.style.transform = "rotate(180deg)";
+        } else if (keys.right) {
+          coords.pacman.x += speed;
+          coords.pacman.dx = speed;
+          pacman.style.transform = "rotate(0deg)";
+        } else {
+          coords.pacman.dx = 0;
+        }
+      } 
+
+      if (coords.pacman.x < bounds[0]) coords.pacman.x = bounds[0];
+      if (coords.pacman.y < bounds[1]) coords.pacman.y = bounds[1];
+      if (coords.pacman.x > bounds[2]) coords.pacman.x = bounds[2];
+      if (coords.pacman.y > bounds[3]) coords.pacman.y = bounds[3];
+
+      pacman.style.left = (coords.pacman.x-22) + "px";
+      pacman.style.top  = (coords.pacman.y-22) + "px";
+    }
+
+    window.onload = function() {
+      input = new Input();
+      window.addEventListener('keydown', function(event) { input.pressed(event.keyCode); }, false);
+      window.addEventListener('keyup', function(event) { input.released(event.keyCode); }, false);
+      setInterval(mainloop, 10);
+    }
+  </script>
+  </head>
+  <body>
+  <div id="stage" style="height: 800px; width: 722px; background: no-repeat url('background.png'); margin: auto; position: relative;">
+    <img id="pacman" src="pacman.gif" style="position: absolute; left:0px; top:0px;">
+  </div>
+  </body>
+</html>
