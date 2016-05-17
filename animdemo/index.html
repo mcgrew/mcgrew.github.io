@@ -123,8 +123,9 @@
 
     /* ====================== Input ===================== */
 
-    function Input(character, up, down, left, right) {
+    function Input(character, map, up, down, left, right) {
       this.character = character;
+      this.map = map;
       if (up)
         this.up = up;
       if (down)
@@ -148,13 +149,17 @@
         input = this.keys;
         alt = this.lastKeys;
       }
-      var filteredKeys = input;
+      var filteredKeys = input  
+      var moves = this.map.validMoves(this.character.mapX(), this.character.mapY());
       if ((this.character.x - bounds[0]) % 26) {
         filteredKeys &= 3;
+        moves |= 3;
       }
       if ((this.character.y - bounds[1]) % 26) {
         filteredKeys &= 12
+        moves |= 12;
       }
+      filteredKeys &= moves;
       if (!filteredKeys && alt)
         return this.filter(alt)
       return filteredKeys;
@@ -200,6 +205,7 @@
 
     function Map(map) {
       this.map = map;
+      this.buildIndex();
       return this;
     }
 
@@ -230,7 +236,6 @@
       var i = pacman.mapX()
       var j = pacman.mapY()
       if (this.map[j][i].remove) {       // if this is a pellet
-//        sound.chomp.stop();
         chompSound();
         if (this.map[j][i].attr("src") == "pellet.png")
           scoreadd = 10;
@@ -240,6 +245,37 @@
         this.map[j][i] = 0;
       }
       return scoreadd;
+    }
+
+    Map.prototype.isPassable = function(x, y) {
+      return this.map(y, x) >= 0;
+    }
+
+    Map.prototype.buildIndex = function() {
+      this.index = []
+      for (var i=0; i < this.map.length; i++) {
+        this.index.push([]);
+        for (var j=0; j < this.map[i].length; j++) {
+          var moves = 0;
+          if (i > 0 && this.map[i-1][j] != -1) {
+            moves |= 8;
+          }
+          if (i < this.map.length-1 && this.map[i+1][j] != -1) {
+            moves |= 4;
+          }
+          if (j > 0 && this.map[i][j-1] != -1) {
+            moves |= 2;
+          }
+          if (j < this.map[i].length-1 && this.map[i][j+1] != -1) {
+            moves |= 1;
+          }
+          this.index[i].push(moves);
+        }
+      }
+    }
+
+    Map.prototype.validMoves = function(x, y) {
+      return this.index[y][x];
     }
 
     /* ================ Random functions ================ */
@@ -342,13 +378,13 @@
 
     window.onload = function() {
       pacman = new Character( bounds[0] + 320, bounds[1] + 572, '#pacman', true);
-      input = new Input(pacman);
       inky   = new Character( 300, 360, '#inky');
       blinky = new Character( 352, 282, '#blinky');
       pinky  = new Character( 352, 360, '#pinky');
       pinky.dy = 1; // temporary
       clyde  = new Character( 403, 360, '#clyde');
       stage = new Map(map);
+      input = new Input(pacman, stage);
       stage.draw();
       window.addEventListener('keydown', function(event) { input.pressed(event.keyCode); }, false);
       window.addEventListener('keyup', function(event) { input.released(event.keyCode); }, false);
