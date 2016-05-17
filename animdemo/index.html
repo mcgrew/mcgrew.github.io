@@ -37,7 +37,7 @@
     sound = {
       chomp: [ new Audio("sound/chomp1.wav"), new Audio("sound/chomp2.wav") ]
     }
-    var bounds = [ 32, 24, 678, 749 ];
+    var bounds = [ 28, 22, 678, 750 ];
     score = 0;
     hiscore = 0;
     var speed = 2;
@@ -123,7 +123,8 @@
 
     /* ====================== Input ===================== */
 
-    function Input(up, down, left, right) {
+    function Input(character, up, down, left, right) {
+      this.character = character;
       if (up)
         this.up = up;
       if (down)
@@ -135,50 +136,64 @@
       return this;
     }
 
-    Input.prototype.keys = {};
+    Input.prototype.keys = 0;
+    Input.prototype.lastKeys = 0;
     Input.prototype.up    = 38;
     Input.prototype.down  = 40;
     Input.prototype.left  = 37;
     Input.prototype.right = 39;
 
-    Input.prototype.filter = function(coords) {
-      return this.keys; // temporary
-//      var returnvalue = {}
-//      returnvalue.up    = this.keys.up;
-//      returnvalue.down  = this.keys.down;
-//      returnvalue.left  = this.keys.left;
-//      returnvalue.right = this.keys.right;
-//      if (!((coords.x - 36) % 26)) {
-//        returnvalue.up = false;
-//        returnvalue.down = false;
-//      }
-//      if (!((coords.y - 34) % 26)) {
-//        returnvalue.left = false;
-//        returnvalue.right = false;
-//      }
-//      return returnvalue;
+    Input.prototype.filter = function(input, alt) {
+      if (input === undefined) {
+        input = this.keys;
+        alt = this.lastKeys;
+      }
+      var filteredKeys = input;
+      if ((this.character.x - bounds[0]) % 26) {
+        filteredKeys &= 3;
+      }
+      if ((this.character.y - bounds[1]) % 26) {
+        filteredKeys &= 12
+      }
+      if (!filteredKeys && alt)
+        return this.filter(alt)
+      return filteredKeys;
     }
 
     Input.prototype.pressed = function(pressed) {
+      var keys = this.keys;
       if (pressed == this.up)
-        this.keys.up    = true;
+        keys |= 8;
       if (pressed == this.down)
-        this.keys.down  = true;
+        keys |= 4;
       if (pressed == this.left)
-        this.keys.left  = true;
+        keys |= 2;
       if (pressed == this.right)
-        this.keys.right = true;
+        keys |= 1;
+
+      if (keys != this.keys) {
+        if (this.filter(this.keys)) 
+          this.lastKeys = this.keys;
+        this.keys = keys;
+      }
     }
 
     Input.prototype.released = function(released) {
+      var keys = this.keys;
       if (released == this.up)
-        this.keys.up    = false;
+        keys &= 7;
       if (released == this.down)
-        this.keys.down  = false;
+        keys &= 11;
       if (released == this.left)
-        this.keys.left  = false;
+        keys &= 13;
       if (released == this.right)
-        this.keys.right = false;
+        keys &= 14;
+
+      if (keys != this.keys) {
+        if (this.filter(this.keys)) 
+          this.lastKeys = this.keys;
+        this.keys = keys;
+      }
     }
 
     /* ==================== Map ========================= */
@@ -245,16 +260,16 @@
     /* ================== Main loop ===================== */
 
     function mainloop() {
-      var keys = input.filter(pacman);
+      var keys = input.filter();
       var dx=0, dy=0;
-      if (keys.up) {
+      if (keys & 8) {
         dy -= speed;
-      } else if (keys.down) {
+      } else if (keys & 4) {
         dy += speed;
       } else {
-        if (keys.left) {
+        if (keys & 2) {
           dx -= speed;
-        } else if (keys.right) {
+        } else if (keys & 1) {
           dx += speed;
         } else { }
       } 
@@ -326,8 +341,8 @@
 
 
     window.onload = function() {
-      input = new Input();
-      pacman = new Character( 352, 594, '#pacman', true);
+      pacman = new Character( bounds[0] + 320, bounds[1] + 572, '#pacman', true);
+      input = new Input(pacman);
       inky   = new Character( 300, 360, '#inky');
       blinky = new Character( 352, 282, '#blinky');
       pinky  = new Character( 352, 360, '#pinky');
