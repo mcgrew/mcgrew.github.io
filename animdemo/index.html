@@ -14,12 +14,29 @@
   #pacman.right {
     transform: rotate(0deg);
   }
+  #score {
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 1.5em;
+    font-weight: bold;
+    width: 722px;
+    margin: auto;
+  }
+  #stage {
+    height: 800px;
+    width: 722px;
+    background: no-repeat url('background.png');
+    margin: auto;
+    position: relative;
+  }
 
   </style>
   <script type="text/javascript" src="jquery-2.1.4.js"></script>
   <script type="text/javascript">
     /* ====================== Globals =================== */
-    var bounds = [ 32, 24, 685, 757 ];
+    var bounds = [ 32, 24, 678, 749 ];
+    score = 0;
+    hiscore = 0;
     var speed = 2;
     var map = [
     [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,-1,-1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -191,12 +208,26 @@
     }
 
     Map.prototype.eat = function(pacman) {
+      var scoreadd = 0;
       var i = pacman.mapX()
       var j = pacman.mapY()
-      if (this.map[j][i].remove) {
+      if (this.map[j][i].remove) {       // if this is a pellet
+        if (this.map[j][i].attr("src") == "pellet.png")
+          scoreadd = 10;
+        else
+          scoreadd = 50;
         this.map[j][i].remove();
         this.map[j][i] = 0;
       }
+      return scoreadd;
+    }
+
+    function updateScore(score) {
+      if (score > hiscore) {
+        hiscore = score;
+        $("#hiscore").text(hiscore);
+      }
+      $("#1upscore").text(score);
     }
 
     /* ================== Mainloop ====================== */
@@ -218,7 +249,8 @@
       if (dx || dy)
         pacman.move(dx, dy);
 
-      stage.eat(pacman);
+      score += stage.eat(pacman);
+      updateScore(score);
 
       // temporary code
       if (pacman.x < bounds[0]) pacman.x = bounds[0];
@@ -298,7 +330,13 @@
   </script>
   </head>
   <body style="background-color: black; color: white;">
-  <div id="stage" style="height: 800px; width: 722px; background: no-repeat url('background.png'); margin: auto; position: relative;">
+  <div id="score" style="">
+    <div id="1upScoreContainer" style="float:left;">
+      1 UP<br><span id="1upscore">0</span>
+    </div>
+    HI SCORE <br><span id="hiscore">0</span>
+  </div>
+  <div id="stage" style="">
     <img id="inky"   src="inky.png" style="position: absolute; left:0px; top:0px;">
     <img id="blinky" src="blinky.png" style="position: absolute; left:0px; top:0px;">
     <img id="pinky"  src="pinky.png" style="position: absolute; left:0px; top:0px;">
