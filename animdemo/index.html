@@ -19,7 +19,7 @@
   <script type="text/javascript" src="jquery-2.1.4.js"></script>
   <script type="text/javascript">
     /* ====================== Globals =================== */
-    var bounds = [ 40, 38, 685, 757 ];
+    var bounds = [ 32, 24, 685, 757 ];
     var speed = 2;
     var map = [
     [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,-1,-1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -75,6 +75,14 @@
       this.y += y;
       this.dx = x;
       this.dy = y;
+    }
+
+    Character.prototype.mapX = function() {
+      return Math.round((this.x - bounds[0]) / 26)
+    }
+
+    Character.prototype.mapY = function() {
+      return Math.round((this.y - bounds[1]) / 26)
     }
 
     Character.prototype.update = function() {
@@ -169,22 +177,27 @@
           if (this.map[i][j] == 1) {
             var newPellet = pellet.clone();
             newPellet.css({'top': i * 26 + 19, 'left': j * 26 + 25 });
+            this.map[i][j] = newPellet;
             newPellet.insertAfter(pacsprite);
           }
           if (this.map[i][j] == 2) {
             var newPellet = ppellet.clone();
             newPellet.css({'top': i * 26 + 19, 'left': j * 26 + 25 });
+            this.map[i][j] = newPellet;
             newPellet.insertAfter(pacsprite);
           }
         }
       }
     }
 
-
-
-
-
-
+    Map.prototype.eat = function(pacman) {
+      var i = pacman.mapX()
+      var j = pacman.mapY()
+      if (this.map[j][i].remove) {
+        this.map[j][i].remove();
+        this.map[j][i] = 0;
+      }
+    }
 
     /* ================== Mainloop ====================== */
 
@@ -204,6 +217,8 @@
       } 
       if (dx || dy)
         pacman.move(dx, dy);
+
+      stage.eat(pacman);
 
       // temporary code
       if (pacman.x < bounds[0]) pacman.x = bounds[0];
