@@ -34,6 +34,9 @@
   <script type="text/javascript" src="jquery-2.1.4.js"></script>
   <script type="text/javascript">
     /* ====================== Globals =================== */
+    sound = {
+      chomp: [ new Audio("sound/chomp1.wav"), new Audio("sound/chomp2.wav") ]
+    }
     var bounds = [ 32, 24, 678, 749 ];
     score = 0;
     hiscore = 0;
@@ -212,6 +215,8 @@
       var i = pacman.mapX()
       var j = pacman.mapY()
       if (this.map[j][i].remove) {       // if this is a pellet
+//        sound.chomp.stop();
+        chompSound();
         if (this.map[j][i].attr("src") == "pellet.png")
           scoreadd = 10;
         else
@@ -222,6 +227,8 @@
       return scoreadd;
     }
 
+    /* ================ Random functions ================ */
+
     function updateScore(score) {
       if (score > hiscore) {
         hiscore = score;
@@ -230,7 +237,12 @@
       $("#1upscore").text(score);
     }
 
-    /* ================== Mainloop ====================== */
+    function chompSound() {
+      if (sound.chomp[0].canPlayType('audio/wav'))
+        sound.chomp[Math.round(score/10) % 2].play();
+    }
+
+    /* ================== Main loop ===================== */
 
     function mainloop() {
       var keys = input.filter(pacman);
