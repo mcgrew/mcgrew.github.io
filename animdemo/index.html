@@ -38,6 +38,7 @@
       chomp: [ new Audio("sound/chomp1.wav"), new Audio("sound/chomp2.wav") ]
     }
     var bounds = [ 28, 22, 678, 750 ];
+    var gridSize = 26;
     score = 0;
     hiscore = 0;
     var speed = 2;
@@ -57,7 +58,7 @@
     [-1,-1,-1,-1,-1, 1,-1,-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1,-1, 1,-1,-1,-1,-1,-1],
     [-1,-1,-1,-1,-1, 1,-1,-1, 0,-1,-1,-1,-1,-1,-1,-1,-1, 0,-1,-1, 1,-1,-1,-1,-1,-1],
     [-1,-1,-1,-1,-1, 1,-1,-1, 0,-1,-1,-1,-1,-1,-1,-1,-1, 0,-1,-1, 1,-1,-1,-1,-1,-1],
-    [-1,-1,-1,-1,-1, 1,-1,-1, 0,-1,-1,-1,-1,-1,-1,-1,-1, 0,-1,-1, 1,-1,-1,-1,-1,-1],
+    [ 0, 0, 0, 0, 0, 1, 0, 0, 0,-1,-1,-1,-1,-1,-1,-1,-1, 0, 0, 0, 1, 0, 0, 0, 0, 0],
     [-1,-1,-1,-1,-1, 1,-1,-1, 0,-1,-1,-1,-1,-1,-1,-1,-1, 0,-1,-1, 1,-1,-1,-1,-1,-1],
     [-1,-1,-1,-1,-1, 1,-1,-1, 0,-1,-1,-1,-1,-1,-1,-1,-1, 0,-1,-1, 1,-1,-1,-1,-1,-1],
     [-1,-1,-1,-1,-1, 1,-1,-1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,-1,-1, 1,-1,-1,-1,-1,-1],
@@ -98,11 +99,11 @@
     }
 
     Character.prototype.mapX = function() {
-      return Math.round((this.x - bounds[0]) / 26)
+      return Math.round((this.x - bounds[0]) / gridSize)
     }
 
     Character.prototype.mapY = function() {
-      return Math.round((this.y - bounds[1]) / 26)
+      return Math.round((this.y - bounds[1]) / gridSize)
     }
 
     Character.prototype.update = function() {
@@ -151,11 +152,11 @@
       }
       var filteredKeys = input  
       var moves = this.map.validMoves(this.character.mapX(), this.character.mapY());
-      if ((this.character.x - bounds[0]) % 26) {
+      if ((this.character.x - bounds[0]) % gridSize) {
         filteredKeys &= 3;
         moves |= 3;
       }
-      if ((this.character.y - bounds[1]) % 26) {
+      if ((this.character.y - bounds[1]) % gridSize) {
         filteredKeys &= 12
         moves |= 12;
       }
@@ -217,13 +218,13 @@
         for (j in this.map[i]) {
           if (this.map[i][j] == 1) {
             var newPellet = pellet.clone();
-            newPellet.css({'top': i * 26 + 19, 'left': j * 26 + 25 });
+            newPellet.css({'top': i * gridSize + 19, 'left': j * gridSize + 25 });
             this.map[i][j] = newPellet;
             newPellet.insertAfter(pacsprite);
           }
           if (this.map[i][j] == 2) {
             var newPellet = ppellet.clone();
-            newPellet.css({'top': i * 26 + 19, 'left': j * 26 + 25 });
+            newPellet.css({'top': i * gridSize + 19, 'left': j * gridSize + 25 });
             this.map[i][j] = newPellet;
             newPellet.insertAfter(pacsprite);
           }
@@ -395,7 +396,7 @@
   <body style="background-color: black; color: white;">
   <div id="score" style="">
     <div id="1upScoreContainer" style="float:left;">
-      1 UP<br><span id="1upscore">0</span>
+      1UP<br><span id="1upscore">0</span>
     </div>
     HI SCORE <br><span id="hiscore">0</span>
   </div>
