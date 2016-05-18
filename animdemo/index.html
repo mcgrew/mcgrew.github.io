@@ -1,11 +1,19 @@
 <!DOCTYPE html>
 <html>
   <head>
+  <meta name="format-detection" content="telephone=no" />
+  <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
   <style type="text/css" rel="stylesheet">
-  html, body {
+  body {
+    -webkit-touch-callout: none;    
+    -webkit-text-size-adjust: none;
     -webkit-user-select: none;
     -moz-user-select: none;
+    -moz-touch-callout: none;    
+    -moz-text-size-adjust: none;
     -ms-user-select: none;
+    -ms-touch-callout: none;    
+    -ms-text-size-adjust: none;
   }
 
   #pacman.up {
@@ -470,34 +478,36 @@
     <img id="pacman" src="pacman.gif" style="position: absolute; left:0px; top:0px;">
   </div>
   <!-- Temporary touch controls -->
-  <div id="show controls" style="text-align:center; margin-top: 20px;" onclick="$('#touch_controls').show(); $('#show_controls').hide();">Show Temporary Touch Controls</div>
-  <div id="touch_controls" style="display: none;margin:auto; width:721px; padding:50px 100px;">
-    <div id="control_up" style="text-align:center; width: 150px; margin: auto; padding: 50px; border:1px solid blue;" 
+  <div id="show controls" style="text-align:center; margin-top: 20px;" onclick="$('#touch_controls').show(); $('#show_controls').hide();">
+    <img src="touch-controls.gif" style="height: 21px;width:384px;">
+  </div>
+  <div id="touch_controls" style="display: none;margin:auto; width:721px; padding:50px">
+    <div id="control_up" style="text-align:center; width: 200px; margin:auto;"
       onmousedown="input.pressed(input.up)" 
       onmouseup="input.released(input.up)"
       onmouseenter="input.pressed(input.up)" 
       onmouseleave="input.released(input.up)"
-    >UP</div>
-    <div id="control_left" style="float:left; margin-left:50px; padding: 50px; border:1px solid blue;" 
+    ><img src="control-arrow.gif" style="width:200px; height:200px;"></div>
+    <div id="control_left" style="text-align:center; width: 200px; float:left;"
       onmousedown="input.pressed(input.left)" 
       onmouseup="input.released(input.left)"
       onmouseenter="input.pressed(input.left)" 
       onmouseleave="input.released(input.left)"
-    >LEFT</div>
-    <div id="control_right" style="float:right; margin-right:50px; padding: 50px; border:1px solid blue;"
+    ><img src="control-arrow.gif" style="transform: rotate(270deg); width:200px; height:200px;"></div>
+    <div id="control_right"  style="text-align:center; width: 200px; float:right;"
       onmousedown="input.pressed(input.right)"
       onmouseup="input.released(input.right)"
       onmouseenter="input.pressed(input.right)" 
       onmouseleave="input.released(input.right)"
-    >RIGHT</div>
+    ><img src="control-arrow.gif" style="transform: rotate(90deg); width:200px; height:200px;"></div>
     <br><br><br><br>
     <br><br><br><br>
-    <div id="control_down" style="text-align:center; width: 150px; margin: auto; padding: 50px; border:1px solid blue;"
+    <div id="control_down" style="text-align:center; width: 200px; margin:auto;"
       onmousedown="input.pressed(input.down)"
       onmouseup="input.released(input.down)"
       onmouseenter="input.pressed(input.down)" 
       onmouseleave="input.released(input.down)"
-    >DOWN</div>
+    ><img src="control-arrow.gif" style="transform: rotate(180deg); height:200px; width:200px;"></div>
   </div>
   <div style="position: fixed; width: 200px; top: 0px; right: 0px">
     Use the arrow keys to move.
