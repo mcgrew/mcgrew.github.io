@@ -48,9 +48,10 @@
     margin: auto;
   }
   #stage {
-    height: 800px;
-    width: 722px;
-    background: no-repeat url('background.png');
+    height: 801px;
+    width: 723px;
+    background: no-repeat url('background.gif');
+    background-size: 723px 801px;
     margin: auto;
     position: relative;
   }
@@ -62,7 +63,7 @@
     sound = {
       chomp: [ new Audio("sound/chomp1.wav"), new Audio("sound/chomp2.wav") ]
     }
-    var bounds = [ 28, 22, 678, 750 ];
+    var bounds = [ 28, 24, 678, 752 ];
     var gridSize = 26;
     score = 0;
     hiscore = 0;
@@ -243,13 +244,19 @@
         for (j in this.map[i]) {
           if (this.map[i][j] == 1) {
             var newPellet = pellet.clone();
-            newPellet.css({'top': i * gridSize + 19, 'left': j * gridSize + 25 });
+            newPellet.css({
+              'top': i * gridSize + bounds[1] - 3,
+              'left': j * gridSize + bounds[0] - 3 
+            });
             this.map[i][j] = newPellet;
             newPellet.insertAfter(pacsprite);
           }
           if (this.map[i][j] == 2) {
             var newPellet = ppellet.clone();
-            newPellet.css({'top': i * gridSize + 19, 'left': j * gridSize + 25 });
+            newPellet.css({
+              'top': i * gridSize + bounds[1] - 3,
+              'left': j * gridSize + bounds[0] - 3 
+            });
             this.map[i][j] = newPellet;
             newPellet.insertAfter(pacsprite);
           }
