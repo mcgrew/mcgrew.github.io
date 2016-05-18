@@ -19,8 +19,8 @@
     position: absolute;
     top: 0px;
     left: 0px;
-    height: 46px;
-    width: 46px;
+    height: 48px;
+    width: 48px;
   }
   .ghost .up, .ghost .down, .ghost .left, .ghost .right {
     display: none;
@@ -237,7 +237,7 @@
 
     Map.prototype.draw = function() {
       var pellet = $('<img src="pellet.png" style="position:absolute;">');
-      var ppellet = $('<img src="powerpellet.png" style="position:absolute;">');
+      var ppellet = $('<img src="powerpellet.gif" style="position:absolute;">');
       var pacsprite = $('#pacman')
       for (i in this.map) {
         for (j in this.map[i]) {
