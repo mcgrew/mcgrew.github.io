@@ -463,6 +463,36 @@
     </div>
     <img id="pacman" src="pacman.gif" style="position: absolute; left:0px; top:0px;">
   </div>
+  <!-- Temporary touch controls -->
+  <div id="show controls" style="text-align:center; margin-top: 20px;" onclick="$('#touch_controls').show(); $('#show_controls').hide();">Show Temporary Touch Controls</div>
+  <div id="touch_controls" style="display: none;margin:auto; width:721px; padding:50px;">
+    <div id="control_up" style="text-align:center; width: 300px; margin: auto;" 
+      onmousedown="input.pressed(input.up)" 
+      onmouseup="input.released(input.up)"
+      onmouseenter="input.pressed(input.up)" 
+      onmouseleave="input.released(input.up)"
+    >UP</div>
+    <br><br><br><br>
+    <div id="control_left" style="float:left; margin-left:100px;" 
+      onmousedown="input.pressed(input.left)" 
+      onmouseup="input.released(input.left)"
+      onmouseenter="input.pressed(input.left)" 
+      onmouseleave="input.released(input.left)"
+    >LEFT</div>
+    <div id="control_right" style="float:right; margin-right:100px;"
+      onmousedown="input.pressed(input.right)"
+      onmouseup="input.released(input.right)"
+      onmouseenter="input.pressed(input.right)" 
+      onmouseleave="input.released(input.right)"
+    >RIGHT</div>
+    <br><br><br><br>
+    <div id="control_down" style="text-align:center; width: 300px; margin: auto;"
+      onmousedown="input.pressed(input.down)"
+      onmouseup="input.released(input.down)"
+      onmouseenter="input.pressed(input.down)" 
+      onmouseleave="input.released(input.down)"
+    >DOWN</div>
+  </div>
   <div style="position: fixed; width: 200px; top: 0px; right: 0px">
     Use the arrow keys to move.
   </div>
