@@ -14,6 +14,31 @@
   #pacman.right {
     transform: rotate(0deg);
   }
+
+  .ghost, .ghost img {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 46px;
+    width: 46px;
+  }
+  .ghost .up, .ghost .down, .ghost .left, .ghost .right {
+    display: none;
+  }
+  .ghost.up .up {
+    display: block;
+  }
+  .ghost.down .down {
+    display: block;
+  }
+  .ghost.left .left {
+    display: block;
+  }
+  .ghost.right .right {
+    display: block;
+  }
+
+
   #score {
     text-align: center;
     text-transform: uppercase;
@@ -107,7 +132,7 @@
     }
 
     Character.prototype.update = function() {
-      this.element.removeClass();
+      this.element.removeClass('up down left right');
       if (this.dx < 0)
         this.element.addClass('left');
       if (this.dx > 0)
@@ -401,10 +426,34 @@
     HI SCORE <br><span id="hiscore">0</span>
   </div>
   <div id="stage" style="">
-    <img id="inky"   src="inky.png" style="position: absolute; left:0px; top:0px;">
-    <img id="blinky" src="blinky.png" style="position: absolute; left:0px; top:0px;">
-    <img id="pinky"  src="pinky.png" style="position: absolute; left:0px; top:0px;">
-    <img id="clyde"  src="clyde.png" style="position: absolute; left:0px; top:0px;">
+    <div class="ghost" id="inky">
+      <img class="sprite" src="inky.gif">
+      <img class="sprite up" src="eyes-up.png">
+      <img class="sprite down" src="eyes-down.png">
+      <img class="sprite left" src="eyes-left.png">
+      <img class="sprite right" src="eyes-right.png">
+    </div>
+    <div class="ghost" id="blinky">
+      <img class="sprite" src="blinky.gif">
+      <img class="sprite up" src="eyes-up.png">
+      <img class="sprite down" src="eyes-down.png">
+      <img class="sprite left" src="eyes-left.png">
+      <img class="sprite right" src="eyes-right.png">
+    </div>
+    <div class="ghost" id="pinky">
+      <img class="sprite" src="pinky.gif">
+      <img class="sprite up" src="eyes-up.png">
+      <img class="sprite down" src="eyes-down.png">
+      <img class="sprite left" src="eyes-left.png">
+      <img class="sprite right" src="eyes-right.png">
+    </div>
+    <div class="ghost" id="clyde">
+      <img class="sprite" src="clyde.gif">
+      <img class="sprite up" src="eyes-up.png">
+      <img class="sprite down" src="eyes-down.png">
+      <img class="sprite left" src="eyes-left.png">
+      <img class="sprite right" src="eyes-right.png">
+    </div>
     <img id="pacman" src="pacman.gif" style="position: absolute; left:0px; top:0px;">
   </div>
   <div style="position: fixed; width: 200px; top: 0px; right: 0px">
