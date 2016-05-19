@@ -181,35 +181,38 @@
     }
 
     Input.prototype.keys = 0;
-    Input.prototype.lastKeys = 0;
+    Input.prototype.nextKeys = 0;
     Input.prototype.up    = 38;
     Input.prototype.down  = 40;
     Input.prototype.left  = 37;
     Input.prototype.right = 39;
 
-    Input.prototype.filter = function(input, alt) {
-      if (input === undefined) {
-        input = this.keys;
-        alt = this.lastKeys;
-      }
-      var filteredKeys = input  
+    Input.prototype.filter = function() {
+      var filteredNextKeys = this.nextKeys;
+      var filteredKeys = this.keys;
       var moves = this.map.validMoves(this.character.mapX(), this.character.mapY());
       if ((this.character.x - bounds[0]) % gridSize) {
+        filteredNextKeys &= 3;
         filteredKeys &= 3;
         moves |= 3;
       }
       if ((this.character.y - bounds[1]) % gridSize) {
+        filteredNextKeys &= 12
         filteredKeys &= 12
         moves |= 12;
       }
+      filteredNextKeys &= moves;
       filteredKeys &= moves;
-      if (!filteredKeys && alt)
-        return this.filter(alt)
+      if (filteredNextKeys) {
+        this.keys = this.nextKeys;
+        this.nextKeys = 0;
+        return filteredNextKeys;
+      }
       return filteredKeys;
     }
 
     Input.prototype.pressed = function(pressed) {
-      var keys = this.keys;
+      var keys = this.nextKeys;
       if (pressed == this.up)
         keys |= 8;
       if (pressed == this.down)
@@ -219,29 +222,25 @@
       if (pressed == this.right)
         keys |= 1;
 
-      if (keys != this.keys) {
-        if (this.filter(this.keys)) 
-          this.lastKeys = this.keys;
-        this.keys = keys;
-      }
+      if (keys != this.keys)
+          this.nextKeys = keys;
     }
 
     Input.prototype.released = function(released) {
-      var keys = this.keys;
-      if (released == this.up)
-        keys &= 7;
-      if (released == this.down)
-        keys &= 11;
-      if (released == this.left)
-        keys &= 13;
-      if (released == this.right)
-        keys &= 14;
-
-      if (keys != this.keys) {
-        if (this.filter(this.keys)) 
-          this.lastKeys = this.keys;
-        this.keys = keys;
-      }
+      return; // do we care if they release the key?
+//      var keys = this.nextKeys;
+//      if (released == this.up)
+//        keys &= 7;
+//      if (released == this.down)
+//        keys &= 11;
+//      if (released == this.left)
+//        keys &= 13;
+//      if (released == this.right)
+//        keys &= 14;
+//
+//      if (keys != this.keys)
+//          this.nextKeys = keys;
+//      }
     }
 
     /* ==================== Map ========================= */
@@ -487,28 +486,20 @@
     <div id="control_up" style="text-align:center; width: 200px; margin:auto;"
       onmousedown="input.pressed(input.up)" 
       onmouseup="input.released(input.up)"
-      onmouseenter="input.pressed(input.up)" 
-      onmouseleave="input.released(input.up)"
     ><img src="control-arrow.gif" style="width:200px; height:200px;"></div>
     <div id="control_left" style="text-align:center; width: 200px; float:left;"
       onmousedown="input.pressed(input.left)" 
       onmouseup="input.released(input.left)"
-      onmouseenter="input.pressed(input.left)" 
-      onmouseleave="input.released(input.left)"
     ><img src="control-arrow.gif" style="transform: rotate(270deg); width:200px; height:200px;"></div>
     <div id="control_right"  style="text-align:center; width: 200px; float:right;"
       onmousedown="input.pressed(input.right)"
       onmouseup="input.released(input.right)"
-      onmouseenter="input.pressed(input.right)" 
-      onmouseleave="input.released(input.right)"
     ><img src="control-arrow.gif" style="transform: rotate(90deg); width:200px; height:200px;"></div>
     <br><br><br><br>
     <br><br><br><br>
     <div id="control_down" style="text-align:center; width: 200px; margin:auto;"
       onmousedown="input.pressed(input.down)"
       onmouseup="input.released(input.down)"
-      onmouseenter="input.pressed(input.down)" 
-      onmouseleave="input.released(input.down)"
     ><img src="control-arrow.gif" style="transform: rotate(180deg); height:200px; width:200px;"></div>
   </div>
   <div style="position: fixed; width: 200px; top: 0px; right: 0px">
