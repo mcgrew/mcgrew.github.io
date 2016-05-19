@@ -31,7 +31,7 @@
     transform: rotate(0deg);
   }
 
-  .ghost, .ghost img {
+  #pacman, #pacman img, .ghost, .ghost img {
     position: absolute;
     top: 0px;
     left: 0px;
@@ -81,8 +81,15 @@
     }
     var bounds = [ 28, 24, 678, 752 ];
     var gridSize = 26;
+    var spawn = { 
+      pacman: { x: bounds[0] + 320, y: bounds[1] + 572 },
+      inky:   { x: 300, y: 360},
+      blinky: { x: 352, y: 282},
+      pinky:  { x: 352, y: 360},
+      clyde:  { x: 403, y: 360}
+    }
     score = 0;
-    hiscore = 0;
+    hiscore = Number(localStorage["hiscore"]) || 0;
     var speed = 2;
     var map = [
     [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,-1,-1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -163,6 +170,39 @@
         'top' : this.y - this.offsety / 2,
       });
     }
+
+    Character.prototype.collidingWith = function (character) {
+      hitbox = { 
+        width: this.element.width() / 4 + character.element.width() / 4,
+        height: this.element.height() / 4 + character.element.height() / 4,
+      }
+      if (Math.abs(this.x - character.x) < hitbox.width &&
+          Math.abs(this.y - character.y) < hitbox.height) {
+        return true;
+      }
+    }
+
+    Character.prototype.isDead = function(value) {
+      if (value !== undefined)
+        this.dead = !!value;
+      if (this.dead)
+        this.element.addClass("dead");
+      else
+        this.element.removeClass("dead");
+      return this.dead;
+    }
+    Character.prototype.dead = false;
+
+    Character.prototype.isScared = function(value) {
+      if (value !== undefined)
+        this.scared = !!value;
+      if (this.scared)
+        this.element.addClass("scared");
+      else
+        this.element.removeClass("scared");
+      return this.scared;
+    }
+    Character.prototype.scared = false;
 
     /* ====================== Input ===================== */
 
@@ -331,6 +371,7 @@
     function updateScore(score) {
       if (score > hiscore) {
         hiscore = score;
+        localStorage["hiscore"] = hiscore;
         $("#hiscore").text(hiscore);
       }
       $("#1upscore").text(score);
@@ -361,6 +402,7 @@
         pacman.move(dx, dy);
 
       score += stage.eat(pacman);
+      $("#hiscore").text(hiscore);
       updateScore(score);
 
       // temporary code
@@ -412,6 +454,10 @@
       /* end temporary ghost code */
 
       update();
+      pacman.collidingWith(blinky);
+      pacman.collidingWith(inky);
+      pacman.collidingWith(pinky);
+      pacman.collidingWith(clyde);
 
     }
 
@@ -425,12 +471,12 @@
 
 
     window.onload = function() {
-      pacman = new Character( bounds[0] + 320, bounds[1] + 572, '#pacman', true);
-      inky   = new Character( 300, 360, '#inky');
-      blinky = new Character( 352, 282, '#blinky');
-      pinky  = new Character( 352, 360, '#pinky');
+      pacman = new Character( spawn.pacman.x, spawn.pacman.y, '#pacman', true);
+      inky   = new Character( spawn.inky.x, spawn.inky.y, '#inky');
+      blinky = new Character( spawn.blinky.x, spawn.blinky.y, '#blinky');
+      pinky  = new Character( spawn.pinky.x, spawn.pinky.y, '#pinky');
       pinky.dy = 1; // temporary
-      clyde  = new Character( 403, 360, '#clyde');
+      clyde  = new Character( spawn.clyde.x, spawn.clyde.y, '#clyde');
       stage = new Map(map);
       input = new Input(pacman, stage);
       stage.draw();
@@ -476,7 +522,9 @@
       <img class="sprite left" src="eyes-left.png">
       <img class="sprite right" src="eyes-right.png">
     </div>
-    <img id="pacman" src="pacman.gif" style="position: absolute; left:0px; top:0px;">
+    <div id="pacman">
+      <img src="pacman.gif">
+    </div>
   </div>
   <!-- Temporary touch controls -->
   <div id="show controls" style="text-align:center; margin-top: 20px;" onclick="$('#touch_controls').show(); $('#show_controls').hide();">
