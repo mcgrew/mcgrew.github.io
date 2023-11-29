@@ -226,7 +226,7 @@
                 let charJobs = [];
                 for (let i=0; i < 8; i++) {
                     let nextJob = jfJobs[ Math.floor(Math.random() * jfJobs.length)];
-                    while(opts & DUPLICATES && charJobs.slice(0,i).includes(charJobs[i])) {
+                    while(opts & DUPLICATES && charJobs.includes(nextJob)) {
                         nextJob = jfJobs[ Math.floor(Math.random() * jfJobs.length)];
                     }
                     while(i % 2 && nextJob == charJobs[i-1]) {
