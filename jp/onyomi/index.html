@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link href="/static/index.css" rel="stylesheet">
+    <script type="module">
+        import * as kanji from './kanji.js';
+        window.kanji = kanji;
+    </script>
+    <script src='index.js'></script>
+  </head>
+  <body>
+      <div id='meaning'></div>
+      <div id='kanji'></div>
+      <div id='choices'>
+          <button class='choice'></button>
+          <button class='choice'></button>
+          <button class='choice'></button>
+          <button class='choice'></button>
+          <button class='choice'></button>
+          <button class='choice'></button>
+      </div>
+      <div id='answer'></div>
+  </body>
+</html>
