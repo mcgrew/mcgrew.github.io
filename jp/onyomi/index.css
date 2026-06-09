@@ -14,6 +14,18 @@ div {
     margin: auto;
 }
 
+#due {
+    float: right;
+    margin-right: 1vh;
+    padding: 1vh;
+    border-radius: 2vh;
+    text-align: center;
+    border: 2px solid black;
+    white-space: pre;
+    font-size: 4vh;
+    background-color: #88d0ff;
+}
+
 #choices {
     display: grid;
     grid-template-columns: auto auto;
@@ -33,7 +45,7 @@ button {
     height: 8vh;
     font-size: 4vh;
     margin: 1vh;
-    border-radius: 1vh;
+    border-radius: 2vh;
 }
 
 #answer {

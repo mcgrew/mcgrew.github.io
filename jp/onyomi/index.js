@@ -1,5 +1,4 @@
 $ = document.querySelector.bind(document);
-$id = document.getElementById.bind(document);
 $$ = document.querySelectorAll.bind(document);
 function shuffle(list) {
     return [...list].sort(() => 0.5 - Math.random());
@@ -12,12 +11,16 @@ function getOptions(readings) {
 function getNextKanji() {
     return new Promise((resolve, reject) => {
         kanji.getDue().then(cards => {
+            const due = $('#due');
             if (cards.length) {
+                due.style.removeProperty('display');
+                due.innerText = `${cards.length} due`;
                 resolve(shuffle(cards)[0]);
             } else {
+                due.style.display = 'none';
                 kanji.getNew().then(cards => {
                     if (cards.length) {
-                        resolve(shuffle(cards)[0]);
+                        resolve(cards.sort((a, b) => a.rank - b.rank)[0]);
                     } else {
                         reject("No more cards");
                     }
@@ -32,9 +35,9 @@ function populate() {
     getNextKanji().then(k => {
         window.card = k;
         const options = getOptions(k.onyomi);
-        const answer = $id('answer');
-        $id('kanji').innerText = k.kanji;
-        $id('meaning').innerText = k.meaning;
+        const answer = $('#answer');
+        $('#kanji').innerText = k.kanji;
+        $('#meaning').innerText = k.meaning;
         answer.dataset.value = k.onyomi[0];
         answer.innerText = '';
         answer.classList.remove('correct');
@@ -49,7 +52,7 @@ function populate() {
     });
 }
 function checkAnswer(button) {
-    const answer = $id('answer')
+    const answer = $('#answer')
     const incorrect = $$('button.incorrect').length;
     const k = window.card;
     if (button.dataset.value == answer.dataset.value) {
@@ -76,25 +79,27 @@ function checkAnswer(button) {
     }
 }
 window.addEventListener('load', function() {
-    window.readings = new Set();
-    kanji.getAll().then(result => {
-        result.forEach(c => {
-            window.readings.add(c.onyomi[0])
+        window.readings = new Set();
+    kanji.init().then(() => {
+        kanji.getAll().then(result => {
+            result.forEach(c => {
+                window.readings.add(c.onyomi[0])
+            });
+            populate();
         });
-        populate();
-    });
-    $$('button').forEach(b => {
-        b.addEventListener('click', function() { 
-            if ($$('button.correct').length) return;
-            checkAnswer(this);
+        $$('button').forEach(b => {
+            b.addEventListener('click', function() { 
+                if ($$('button.correct').length) return;
+                checkAnswer(this);
+            });
         });
+        $('#answer').addEventListener( 'click',
+            () => {if ($$('button.correct').length) populate()});
     });
-    $id('answer').addEventListener( 'click',
-        () => {if ($$('button.correct').length) populate()});
 });
 function reveal() {
     $$('button').forEach(b => {
-        if (b.dataset.value == $id('answer').dataset.value) {
+        if (b.dataset.value == $('#answer').dataset.value) {
             b.classList.add('correct');
         }
     })
