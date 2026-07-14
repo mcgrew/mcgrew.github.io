@@ -5,7 +5,7 @@ function shuffle(list) {
 }
 function getOptions(readings) {
     const possible = [...window.readings].filter(item => !new Set(readings).has(item));
-    const options = [...shuffle(possible).slice(0, 5), readings[0]]
+    const options = [...shuffle(possible).slice(0, $$('button').length - 1), readings[0]]
     return shuffle(options);
 }
 function getNextKanji() {
@@ -14,7 +14,7 @@ function getNextKanji() {
             const due = $('#due');
             if (cards.length) {
                 due.style.removeProperty('display');
-                due.innerText = `${cards.length} due`;
+                due.innerText = `${cards.length}`;
                 resolve(shuffle(cards)[0]);
             } else {
                 due.style.display = 'none';
@@ -56,6 +56,8 @@ function checkAnswer(button) {
     const incorrect = $$('button.incorrect').length;
     const k = window.card;
     if (button.dataset.value == answer.dataset.value) {
+        if (button.classList.contains('incorrect'))
+            return
         answer.innerText = 'CORRECT!';
         answer.className = 'correct';
         button.classList.add('correct');

@@ -21,7 +21,9 @@ export function init() {
     request.onupgradeneeded = function(event) {
       const db = event.target.result;
 
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
+      if (db.objectStoreNames.contains(STORE_NAME)) {
+          updateData();
+      } else {
         // 'index' matches the integer ID field in your JSON dataset
         const store = db.createObjectStore(STORE_NAME, { keyPath: 'index' });
 
@@ -108,7 +110,7 @@ export function getByCharacter(character) {
  * @param {Array<Object>} dataArray - Array of JSON objects matching your structure.
  * @returns {Promise<string>} Success string message.
  */
-export function importData(db) {
+export function importData() {
   return new Promise((resolve, reject) => {
     init().then(db => {
       const transaction = db.transaction([STORE_NAME], 'readwrite');
@@ -122,6 +124,29 @@ export function importData(db) {
       transaction.onerror = () => reject(`Data import aborted: ${transaction.error}`);
     });
   });
+}
+
+export function updateData() {
+    init().then(db => {
+      const transaction = db.transaction([STORE_NAME], 'readonly');
+      const store = transaction.objectStore(STORE_NAME);
+      const request = store.getAll();
+      request.onsuccess = (result, a, b) => {
+          kanjiData.forEach(item => {
+            const dbitem = request.result.filter(dbi => dbi.index == item.index)
+             console.log(dbitem)
+            if (dbitem.length) {
+                const d = dbitem[0]
+                if (d.due || d.repeat) {
+                    item.due = d.due
+                    item.repeat = d.repeat
+                    console.log(`updating ${item.kanji}`)
+    //              store.put(item); // Overwrites duplicates safely
+                }
+            }
+        });
+      }
+    });
 }
 
 /**
