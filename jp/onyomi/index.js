@@ -103,7 +103,7 @@ function reveal() {
     const readings = kanji.all[window.card].readings_on.slice(1);
     if (readings.length)
         $('#other_readings').innerText =
-            '他の音訓: ' + readings.join('、 ');
+            '他の音訓：' + readings.join('、 ');
 }
 
 window.addEventListener('load', function() {

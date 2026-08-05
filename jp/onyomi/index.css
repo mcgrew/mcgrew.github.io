@@ -35,13 +35,14 @@ div {
 
 #kanji {
     font-size: 12vh;
+    margin: -2vh auto;
 }
 
 #meaning {
     font-size: 4vh;
     white-space: pre;
     position: relative;
-    top: 2vh;
+    top: 1vh;
 
 }
 
