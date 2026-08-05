@@ -40,10 +40,19 @@ div {
 #meaning {
     font-size: 4vh;
     white-space: pre;
+    position: relative;
+    top: 2vh;
+
+}
+
+#alt_meaning {
+    font-size: 2vh;
+    white-space: pre;
+    height: 2.2vh;
 }
 
 button {
-    width: 16vh;
+    width: 20vh;
     height: 8vh;
     font-size: 4vh;
     margin: 1vh;
@@ -52,10 +61,16 @@ button {
 
 #answer {
     width: 36vh;
-    height: 8vh;
+    padding: 1.3vh 0;
     font-size: 4vh;
     border-radius: 2vh;
     text-align: center;
+}
+
+#other_readings {
+    margin-top: 1vh;
+    font-size: 3vh;
+    white-space: pre;
 }
 
 .correct {
