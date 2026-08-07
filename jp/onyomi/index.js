@@ -125,12 +125,6 @@ window.addEventListener('load', function() {
                 return sched.filter(k => kanji.scheduled[k].due < now)
             }
         }
-        // temporary - fix old data
-        const now = new Date().getTime();
-        Object.keys(kanji.scheduled).forEach(k => {
-            if (kanji.scheduled[k].due > now * 2)
-                kanji.scheduled[k].due /= 1000;
-        })
         if (!response.ok) {
             throw Error('Unable to load kanji.database!')
         }
