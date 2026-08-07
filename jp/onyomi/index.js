@@ -14,7 +14,7 @@ function nextDue(repeat) {
 function nextRepeat(repeat, incorrect) {
     // 3m 15s minimum. This multiplies by 2 cleanly into days
     // does this matter? not really.
-    return Math.min(repeat * (2 - incorrect), 225)
+    return Math.max((repeat || 0) * (2 - incorrect), 225)
 }
 
 function save() {
