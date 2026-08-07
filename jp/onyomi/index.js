@@ -5,11 +5,16 @@ function shuffle(list) {
     return [...list].sort(() => 0.5 - Math.random());
 }
 
-/** @param offset The offset in days from today */
-function day(offset) {
-    const date = new Date();
-    date.setDate(date.getDate() + (offset || 0))
-    return date.setHours(0, 0, 0, 0)
+/** @param repeat how many seconds before the card should repeat.
+ */
+function nextDue(repeat) {
+    return Math.round(new Date().getTime() / 1000) + (repeat || 0);
+}
+
+function nextRepeat(repeat, incorrect) {
+    // 3m 15s minimum. This multiplies by 2 cleanly into days
+    // does this matter? not really.
+    return Math.min(repeat * (2 - incorrect), 225)
 }
 
 function save() {
@@ -52,7 +57,7 @@ function populate(pickedKanji) {
     const alt_def = entry.meanings.filter(m => m != def).join(', ')
     $('#kanji').innerText = k;
     $('#meaning').innerText = def;
-    $('#alt_meaning').innerText = alt_def;
+    $('#alt-meaning').innerText = alt_def;
     $('#other_readings').innerText = ''
     answer.dataset.value = entry.readings_on[0];
     answer.innerText = '';
@@ -77,9 +82,8 @@ function checkAnswer(button) {
         button.classList.add('correct');
         reveal();
         let sched = kanji.scheduled[window.card] || {};
-        if (!incorrect)
-            sched.repeat = sched.repeat ? sched.repeat * 2 : 1;
-        sched.due = day(sched.repeat)
+        sched.repeat = nextRepeat(sched.repeat, incorrect)
+        sched.due = nextDue(sched.repeat)
         kanji.scheduled[window.card] = sched;
         save()
     } else {
@@ -88,7 +92,10 @@ function checkAnswer(button) {
         button.classList.add('incorrect');
         if (incorrect == 1) {
             reveal();
-            kanji.scheduled[window.card] = {due: day(), repeat: 0};
+            kanji.scheduled[window.card] = {
+                due: nextDue(),
+                repeat: nextRepeat()
+            };
             save()
         }
     }
@@ -103,7 +110,7 @@ function reveal() {
     const readings = kanji.all[window.card].readings_on.slice(1);
     if (readings.length)
         $('#other_readings').innerText =
-            '他の音訓：' + readings.join('、 ');
+            '他の音訓： ' + readings.join('、 ');
 }
 
 window.addEventListener('load', function() {
@@ -113,11 +120,17 @@ window.addEventListener('load', function() {
             readings: new Set(),
             scheduled: JSON.parse(localStorage.getItem('onyomi') || '{}'),
             due: () => {
-                const midnight = day()
+                const now = nextDue();
                 const sched = Object.keys(kanji.scheduled);
-                return sched.filter(k => kanji.scheduled[k].due <= midnight)
+                return sched.filter(k => kanji.scheduled[k].due < now)
             }
         }
+        // temporary - fix old data
+        const now = new Date().getTime();
+        Object.keys(kanji.scheduled).forEach(k => {
+            if (kanji.scheduled[k].due > now * 2)
+                kanji.scheduled[k].due /= 1000;
+        })
         if (!response.ok) {
             throw Error('Unable to load kanji.database!')
         }
