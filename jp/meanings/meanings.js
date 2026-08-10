@@ -55,10 +55,4 @@ export class MeaningQuiz extends Quiz {
                 meanings.join(', ');
         }
     }
-
-    buttonText(button, value) {
-        super.buttonText(button, value);
-        const size = value.length > 20 ? 60 / value.length : 3;
-        button.style.fontSize = `${size}vh`;
-    }
 }

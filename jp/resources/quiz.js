@@ -39,8 +39,23 @@ export class Quiz {
     loadData(data) {
         this.all = this.prepareData(data);
         this.keys = Object.keys(this.all);
-        this.scheduled = JSON.parse(localStorage.getItem(this.quizName) || '{}'),
+        this.scheduled = JSON.parse(localStorage.getItem(this.quizName) || '{}');
+        const observer = new MutationObserver((mutations) => {
+            mutations.forEach(mutation => {
+                const button = mutation.target;
+                button.style.removeProperty('font-size');
+                let size = parseFloat(getComputedStyle(button).fontSize);
+                while ((button.scrollWidth > button.clientWidth)
+                        || (button.scrollHeight > button.clientHeight)) {
+                    size *= 0.95
+                    console.log(size);
+                    button.style.fontSize = `${size}px`;
+                }
+            });
+        });
+        // watch for button text changes and adjust the font size
         $$('button').forEach(b => {
+            observer.observe(b, {childList: true});
             b.addEventListener('click', function(button) { 
                 if ($$('button.correct').length) return;
                 this.checkAnswer(button);
@@ -159,13 +174,9 @@ export class Quiz {
             b.classList.remove('correct');
             b.classList.remove('incorrect');
             const value = options.pop();
-            this.buttonText(b, value);
+            b.innerText = value;
             b.dataset.value = value;
         });
-    }
-
-    buttonText(button, value) {
-        button.innerText = value;
     }
 
     nextDue(repeat) {
