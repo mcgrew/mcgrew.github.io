@@ -5,7 +5,7 @@ const $ = document.querySelector.bind(document);
 export class MeaningQuiz extends Quiz {
     constructor(dataFile, quizName) {
         super(dataFile, quizName || 'meanings');
-        this.guesses = 1;
+//          this.guesses = 1;
     }
 
     prepareData(data) {
