@@ -33,12 +33,17 @@ div {
     grid-template-columns: auto auto;
 }
 
-#kanji {
+#card {
+    font-size: 12vh;
+    text-align: center;
+}
+
+#question {
     font-size: 12vh;
     margin: -2vh auto;
 }
 
-#meaning {
+#hint {
     font-size: 4vh;
     white-space: pre;
     position: relative;
@@ -46,7 +51,7 @@ div {
 
 }
 
-#alt-meaning {
+#extra-hint {
     font-size: 2vh;
     line-height: 2.2vh;
     height: 2.2vh;
@@ -68,7 +73,7 @@ button {
     text-align: center;
 }
 
-#other_readings {
+#info {
     margin-top: 1vh;
     font-size: 3vh;
     white-space: pre;
