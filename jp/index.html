@@ -13,10 +13,12 @@
         body {
             background-color: white;
             font-family: 'irohamaru mikami';
+            color: white;
         }
-        div {
+        body > div {
             font-size: 5vh;
             display: flex;
+            flex-direction: column;
             align-Items: center;
             justify-content: center;
             width: 90vw;
@@ -26,15 +28,23 @@
         a {
             text-decoration: none;
             color: white;
+        }
+        .count { font-size: 0.5em; }
     </style>
   </head>
   <body style='background-color:#000'>
       <div style="background-color:#f88">
-          <a href='meanings'>Meanings</a>
+          <div><a href='meanings'>Meanings</a></div>
+          <div class='count'><span id='meaning-count'></span> Reviewed</div>
       </div>
       <br>
       <div style="background-color: #88f">
-          <a href='onyomi/'>Onyomi Readings</a>
+          <div><a href='onyomi/'>Onyomi Readings</a></div>
+          <div class='count'><span id='onyomi-count'></span> Reviewed</div>
       </div>
   </body>
+  <script>
+      document.getElementById('meaning-count').innerText = Object.keys(JSON.parse(localStorage.meanings || '{}')).length
+      document.getElementById('onyomi-count').innerText = Object.keys(JSON.parse(localStorage.onyomi || '{}')).length
+  </script>
 </html>

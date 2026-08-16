@@ -20,6 +20,11 @@ Set.prototype.shuffle = function() {
     return [...this].sort(() => 0.5 - Math.random());
 }
 
+HTMLElement.prototype.overflows = function() {
+    return (this.scrollWidth > this.clientWidth)
+        || (this.scrollHeight > this.clientHeight);
+}
+
 export class Quiz {
     constructor(dataFile, quizName) {
         if (!quizName)
@@ -45,8 +50,7 @@ export class Quiz {
                 const button = mutation.target;
                 button.style.removeProperty('font-size');
                 let size = parseFloat(getComputedStyle(button).fontSize);
-                while ((button.scrollWidth > button.clientWidth)
-                        || (button.scrollHeight > button.clientHeight)) {
+                while (button.overflows()) {
                     size *= 0.95
                     console.log(size);
                     button.style.fontSize = `${size}px`;

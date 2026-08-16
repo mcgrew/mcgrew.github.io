@@ -35,9 +35,9 @@ export class OnyomiQuiz extends Quiz {
         const card = this.all[this.card];
         const meaning =  card.wk_meanings[0] || card.meanings[0];
         const altMeaning = card.meanings.filter(m => m != meaning).join(', ')
-        const altMeaningStyle = 'font-size:0.16em; height:0.18em; line-height:0.18em;';
-        const meaningStyle = 'font-size:0.33em; position:relative; top:0.5em';
-        const kanjiStyle = 'margin:-0.16em'; 
+        const altMeaningStyle = 'font-size:0.16em; height:0.18em; line-height:1.1em;';
+        const meaningStyle = 'font-size:0.33em; position:relative; top:0.8em';
+        const kanjiStyle = 'margin:-0.1em'; 
         return `
         <div style="${altMeaningStyle}">${altMeaning}</div>
         <div style="${meaningStyle}">${meaning}</div>
