@@ -112,18 +112,23 @@ for k, v in kanji.items():
     if not v['wk_meanings'] and not v['meanings']:
         continue
     meanings = set()
+    counter = None
     if v['wk_meanings']:
         for m in v['wk_meanings']:
             meanings.add(m.removeprefix('^').removeprefix('~'))
     elif v['meanings']:
         for m in v['meanings']:
-            if " Radical" not in m:
-                meanings.add(m.removeprefix('^').removeprefix('~'))
+            if " Radical" not in m and "Counter For" not in m:
+                meanings.add(m)
+    for m in v['meanings']:
+        if "Counter For" in m:
+            counter = m.replace("Counter For ", "")
     del v['wk_meanings']
     del v['wk_readings_on']
     del v['wk_readings_kun']
     del v['wk_radicals']
     v['meanings'] = list(meanings)
+    v['counter'] = counter
     filtered_list.append((k, v))
 
 filtered_list.sort(key=lambda k: k[1]['freq'] or 99999)
