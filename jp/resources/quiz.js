@@ -86,12 +86,14 @@ export class Quiz {
         const cards = this.due();
         const due = $('#due');
         if (cards.length) {
-            due.style.removeProperty('display');
+            due.style.removeProperty('background-color');
             due.innerText = `${cards.length}`;
             this.populate(cards.shuffle()[0]);
         } else {
-            due.style.display = 'none';
             const scheduled = new Set(Object.keys(this.scheduled));
+            console.log(scheduled)
+            due.style.backgroundColor = '#00ff00';
+            due.innerText = `${scheduled.size}`;
             const keys = this.sorted(this.keys.filter(k => !scheduled.has(k)));
             if (keys.length) {
                 this.populate(keys[0]);

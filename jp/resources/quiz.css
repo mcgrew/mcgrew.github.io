@@ -17,14 +17,14 @@ div {
 #due {
     position: absolute;
     right: 1vh;
-    bottom: 1vh;
+    top: 1vh;
     min-width: 6vh;
     border-radius: 2vh;
     text-align: center;
     border: 2px solid black;
     white-space: pre;
     font-size: 4vh;
-    background-color: #88d0ff;
+    background-color: #ee0;
 }
 
 #choices {

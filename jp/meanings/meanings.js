@@ -17,8 +17,6 @@ export class MeaningQuiz extends Quiz {
         });
         this.allMeanings = new Set();
         Object.keys(data).forEach(k => {
-            if (data[k].wk_meanings)
-                data[k].wk_meanings.forEach(r => this.allMeanings.add(r));
             data[k].meanings.forEach(r => this.allMeanings.add(r.clean()));
         });
         return super.prepareData(data);
@@ -35,7 +33,7 @@ export class MeaningQuiz extends Quiz {
     populate(pickedKanji) {
         // preload all unique meanings
         const card = this.all[pickedKanji];
-        this.meanings = [...card.meanings, ...(card.wk_meanings || [])]
+        this.meanings = [...card.meanings]
             .map(m => m.clean()).dedupe().shuffle();
         super.populate(pickedKanji);
     }
@@ -47,7 +45,7 @@ export class MeaningQuiz extends Quiz {
     reveal() {
         super.reveal();
         const card = this.all[this.card];
-        const meanings = [...card.meanings, ...(card.wk_meanings || [])]
+        const meanings = [...card.meanings]
             .map(m => m.clean()).dedupe()
             .filter(m => m != this.meanings[0])
         if (meanings.length) {

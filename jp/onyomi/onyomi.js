@@ -32,16 +32,14 @@ export class OnyomiQuiz extends Quiz {
     }
 
     cardHTML() {
-        const card = this.all[this.card];
-        const meaning =  card.wk_meanings[0] || card.meanings[0];
-        const altMeaning = card.meanings.filter(m => m != meaning).join(', ')
-        const altMeaningStyle = 'font-size:0.16em; height:0.18em; line-height:1.1em;';
-        const meaningStyle = 'font-size:0.33em; position:relative; top:0.8em';
-        const kanjiStyle = 'margin:-0.1em 0'; 
-        return `
-        <div style="${altMeaningStyle}">${altMeaning}</div>
-        <div style="${meaningStyle}">${meaning}</div>
-        <div style="${kanjiStyle}">${this.card}</div>`;
+        return this.card;
+//          const card = this.all[this.card];
+//          const meaning =  card.meanings[0];
+//          const meaningStyle = 'font-size:0.33em; position:relative; top:0.8em';
+//          const kanjiStyle = 'margin:-0.1em 0'; 
+//          return `
+//          <div style="${meaningStyle}">${meaning}</div>
+//          <div style="${kanjiStyle}">${this.card}</div>`;
     }
 
     reveal() {
@@ -49,7 +47,7 @@ export class OnyomiQuiz extends Quiz {
         const readings = this.all[this.card].readings_on.slice(1);
         if (readings.length) {
             document.getElementById('info').innerText = 
-                '他の音訓： ' + readings.join('、 ');
+                '他： ' + readings.join('、 ');
         }
     }
 }
