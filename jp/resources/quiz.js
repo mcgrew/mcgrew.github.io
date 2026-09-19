@@ -52,7 +52,6 @@ export class Quiz {
                 let size = parseFloat(getComputedStyle(button).fontSize);
                 while (button.overflows()) {
                     size *= 0.95
-                    console.log(size);
                     button.style.fontSize = `${size}px`;
                 }
             });
@@ -85,13 +84,16 @@ export class Quiz {
     next() {
         const cards = this.due();
         const due = $('#due');
-        if (cards.length) {
+        if (cards.length) { // nothing due, pick a new one.
             due.style.removeProperty('background-color');
-            due.innerText = `${cards.length}`;
+            if (cards.length == Object.keys(this.all).length) {
+                due.innerText = '✓';
+            } else {
+                due.innerText = `${cards.length}`;
+            }
             this.populate(cards.shuffle()[0]);
         } else {
             const scheduled = new Set(Object.keys(this.scheduled));
-            console.log(scheduled)
             due.style.backgroundColor = '#00ff00';
             due.innerText = `${scheduled.size}`;
             const keys = this.sorted(this.keys.filter(k => !scheduled.has(k)));
@@ -163,9 +165,9 @@ export class Quiz {
         });
     }
 
-    populate(pickedKanji) {
-        console.log(`Next: ${pickedKanji}`);
-        this.card = pickedKanji;
+    populate(picked) {
+        console.log(`Next: ${picked}`);
+        this.card = picked;
         const entry = this.all[this.card];
         const answer = $('#answer');
         $('#card').innerHTML = this.cardHTML();

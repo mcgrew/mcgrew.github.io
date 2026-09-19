@@ -31,17 +31,6 @@ export class OnyomiQuiz extends Quiz {
         return this.all[this.card].readings_on[0];
     }
 
-    cardHTML() {
-        return this.card;
-//          const card = this.all[this.card];
-//          const meaning =  card.meanings[0];
-//          const meaningStyle = 'font-size:0.33em; position:relative; top:0.8em';
-//          const kanjiStyle = 'margin:-0.1em 0'; 
-//          return `
-//          <div style="${meaningStyle}">${meaning}</div>
-//          <div style="${kanjiStyle}">${this.card}</div>`;
-    }
-
     reveal() {
         super.reveal();
         const readings = this.all[this.card].readings_on.slice(1);

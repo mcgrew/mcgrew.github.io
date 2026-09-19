@@ -6,14 +6,14 @@
     <style>
         @font-face {
           font-family: "irohamaru mikami";
-          src: url("irohamaru mikami.ttf") format("truetype");
+          src: url("resources/irohamaru mikami.ttf") format("truetype");
           font-weight: 400;
           font-style: normal;
         }
         body {
             background-color: white;
             font-family: 'irohamaru mikami';
-            color: white;
+            color: black;
         }
         body > div {
             font-size: 5vh;
@@ -22,28 +22,40 @@
             align-Items: center;
             justify-content: center;
             width: 90vw;
-            height: 40vh;
+            height: 20vh;
             margin: auto;
         }
         a {
             text-decoration: none;
-            color: white;
+            color: black;
         }
         .count { font-size: 0.5em; }
     </style>
   </head>
-  <body style='background-color:#000'>
-      <div style="background-color:#f88">
-          <div><a href='meanings'>Meanings</a></div>
+  <body>
+      <div style="background-color:#ff8" onclick='window.location="kana/hiragana.html"'>
+          <div>Hiragana</div>
+          <div class='count'><span id='hiragana-count'></span> Reviewed</div>
+      </div>
+      <br>
+      <div style="background-color: #8f8" onclick='window.location="kana/katakana.html"'>
+          <div>Katakana</div>
+          <div class='count'><span id='katakana-count'></span> Reviewed</div>
+      </div>
+      <br>
+      <div style="background-color:#f88" onclick='window.location="meanings/"'>
+          <div>Meanings</div>
           <div class='count'><span id='meaning-count'></span> Reviewed</div>
       </div>
       <br>
-      <div style="background-color: #88f">
-          <div><a href='onyomi/'>Onyomi Readings</a></div>
+      <div style="background-color: #88f" onclick='window.location="onyomi/"'>
+          <div>Onyomi Readings</div>
           <div class='count'><span id='onyomi-count'></span> Reviewed</div>
       </div>
   </body>
   <script>
+      document.getElementById('hiragana-count').innerText = Object.keys(JSON.parse(localStorage.hiragana || '{}')).length
+      document.getElementById('katakana-count').innerText = Object.keys(JSON.parse(localStorage.katakana || '{}')).length
       document.getElementById('meaning-count').innerText = Object.keys(JSON.parse(localStorage.meanings || '{}')).length
       document.getElementById('onyomi-count').innerText = Object.keys(JSON.parse(localStorage.onyomi || '{}')).length
   </script>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <link href="../resources/quiz.css" rel="stylesheet">
+    <style type="text/css">
+        button { font-size: 3vh; line-height: 1.05em;}
+    </style>
+    <script type='module'>
+        import {KanaQuiz} from './kana.js';
+        window.addEventListener('load', function() {
+            window.kata = new KanaQuiz('../resources/katakana.json', 'katakana');
+        });
+    </script>
+  </head>
+  <body>
+      <div id='due'></div>
+      <div id='card'></div>
+      <div id='choices'>
+          <button class='choice'></button>
+          <button class='choice'></button>
+          <button class='choice'></button>
+          <button class='choice'></button>
+          <button class='choice'></button>
+          <button class='choice'></button>
+          <button class='choice'></button>
+          <button class='choice'></button>
+          <button class='choice'></button>
+          <button class='choice'></button>
+      </div>
+      <div id='answer'></div>
+      <div id='info'></div>
+  </body>
+</html>

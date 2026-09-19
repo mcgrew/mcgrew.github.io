@@ -116,6 +116,7 @@ for k, v in kanji.items():
     if v['wk_meanings']:
         for m in v['wk_meanings']:
             meanings.add(m.removeprefix('^').removeprefix('~'))
+        meanings.add(v['meanings'][0])
     elif v['meanings']:
         for m in v['meanings']:
             if " Radical" not in m and "Counter For" not in m:
