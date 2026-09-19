@@ -27,6 +27,8 @@ HTMLElement.prototype.overflows = function() {
 
 export class Quiz {
     constructor(dataFile, quizName) {
+        this.correctText = 'Correct!';
+        this.incorrectText = 'Incorrect!';
         if (!quizName)
             throw Error('Quiz name is not defined!')
         this.quizName = quizName
@@ -133,7 +135,7 @@ export class Quiz {
         const answer = $('#answer');
         const incorrect = $$('button.incorrect').length;
         if (button.dataset.value == answer.dataset.value) {
-            answer.innerText = '正確！';
+            answer.innerText = this.correctText;
             answer.className = 'correct';
             button.classList.add('correct');
             this.reveal();
@@ -143,7 +145,7 @@ export class Quiz {
             this.scheduled[this.card] = sched;
             this.save()
         } else {
-            answer.innerText = '不正確！';
+            answer.innerText = this.incorrectText;
             answer.className = 'incorrect';
             button.classList.add('incorrect');
             if (incorrect+1 == this.guesses) {
