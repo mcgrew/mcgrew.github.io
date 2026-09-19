@@ -22,6 +22,11 @@ export class MeaningQuiz extends Quiz {
         return super.prepareData(data);
     }
 
+    sorted(keys) {
+        return (keys.sort((a, b) => 
+            (this.all[a].freq || 9999) - (this.all[b].freq || 9999))[0]);
+    }
+
     options() {
         const count = document.querySelectorAll('button').length;
         const cardInfo = this.all[this.card];

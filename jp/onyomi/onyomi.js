@@ -19,6 +19,11 @@ export class OnyomiQuiz extends Quiz {
         return data;
     }
 
+    sorted(keys) {
+        return (keys.sort((a, b) => 
+            (this.all[a].freq || 9999) - (this.all[b].freq || 9999))[0]);
+    }
+
     options() {
         const buttons = document.querySelectorAll('button');
         const readings = this.all[this.card].readings_on;

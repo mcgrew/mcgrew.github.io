@@ -86,30 +86,28 @@ export class Quiz {
     next() {
         const cards = this.due();
         const due = $('#due');
-        if (cards.length) { // nothing due, pick a new one.
+        if (cards.length) {  // pick a random due card
+            const scheduled = Object.keys(this.scheduled)
             due.style.removeProperty('background-color');
-            if (cards.length == Object.keys(this.all).length) {
-                due.innerText = '✓';
-            } else {
-                due.innerText = `${cards.length}`;
-            }
+            due.innerText = `${cards.length}`;
             this.populate(cards.shuffle()[0]);
         } else {
             const scheduled = new Set(Object.keys(this.scheduled));
             due.style.backgroundColor = '#00ff00';
             due.innerText = `${scheduled.size}`;
             const keys = this.sorted(this.keys.filter(k => !scheduled.has(k)));
-            if (keys.length) {
+            if (keys.length) {  // nothing due, pick a new one.
                 this.populate(keys[0]);
-            } else {
-                this.populate(this.keys.shuffle()[0]);
+            } else { // no cards due and no new cards, pick a random one
+                due.innerText = '✓';
+                const k = this.keys.shuffle()
+                this.populate(k[0]);
             }
         }
     }
 
     sorted(keys) {
-        return (keys.sort((a, b) => 
-            (this.all[a].freq || 9999) - (this.all[b].freq || 9999))[0]);
+        return keys;
     }
 
     save() {
