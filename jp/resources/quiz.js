@@ -32,7 +32,6 @@ export class Quiz {
         if (!quizName)
             throw Error('Quiz name is not defined!')
         this.quizName = quizName
-        this.guesses = 2;
         fetch(dataFile).then(function(response) {
             if (!response.ok) {
                 throw Error('Unable to load question database!')
@@ -131,30 +130,41 @@ export class Quiz {
         if (button.classList.contains('incorrect') || $$('button.correct').length)
             return;
         const answer = $('#answer');
-        const incorrect = $$('button.incorrect').length;
+        const sched = this.scheduled[this.card] || {};
         if (button.dataset.value == answer.dataset.value) {
-            answer.innerText = this.correctText;
-            answer.className = 'correct';
-            button.classList.add('correct');
+            this.showCorrect(button);
             this.reveal();
-            let sched = this.scheduled[this.card] || {};
-            sched.repeat = this.nextRepeat(sched.repeat, incorrect)
+            sched.repeat = this.nextRepeat(sched.repeat)
+            console.log(sched.repeat)
             sched.due = this.nextDue(sched.repeat)
             this.scheduled[this.card] = sched;
             this.save()
         } else {
-            answer.innerText = this.incorrectText;
-            answer.className = 'incorrect';
-            button.classList.add('incorrect');
-            if (incorrect+1 == this.guesses) {
+            this.showIncorrect(button);
+            if (this.incorrectCount() == 2) {
                 this.reveal();
+                const repeat = this.nextRepeat(sched.repeat);
                 this.scheduled[this.card] = {
-                    due: this.nextDue(),
-                    repeat: this.nextRepeat()
+                    repeat: repeat,
+                    due: this.nextDue(repeat)
                 };
                 this.save()
             }
         }
+    }
+
+    showCorrect(button) {
+        const answer = $('#answer');
+        answer.innerText = this.correctText;
+        answer.className = 'correct';
+        button.classList.add('correct');
+    }
+
+    showIncorrect(button) {
+        const answer = $('#answer');
+        answer.innerText = this.incorrectText;
+        answer.className = 'incorrect';
+        button.classList.add('incorrect');
     }
 
     reveal() {
@@ -187,12 +197,21 @@ export class Quiz {
         });
     }
 
+    incorrectCount() {
+        return $$('button.incorrect').length;
+    }
+
     nextDue(repeat) {
         return Math.round(new Date().getTime() / 1000) + (repeat || 0);
     }
 
-    nextRepeat(repeat, incorrect) {
-        // 3m 15s minimum.
-        return Math.max((repeat || 0) * (this.guesses - incorrect), 225)
+    nextRepeat(repeat) {
+        const incorrect = this.incorrectCount();
+        repeat = repeat || 0;
+        if (incorrect == 0)
+            return Math.max(repeat * 2, 225);
+        if (incorrect == 1)
+            return Math.max(repeat / 2, 225);
+        return 0;
     }
 }
