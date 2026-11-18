@@ -30,6 +30,7 @@ for k, info in kanji.items():
 print('''<!DOCTYPE html>
 <html>
  <head>
+  <title>Onyomi Reading Table</title>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <link href="../resources/table.css" rel="stylesheet">
