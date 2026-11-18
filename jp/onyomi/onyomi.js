@@ -29,13 +29,17 @@ export class OnyomiQuiz extends Quiz {
         const readings = this.all[this.card].readings_on;
         const possible = [...this.allAnswers].filter(item => !readings.includes(item));
         const options = [...possible.shuffle().slice(0, buttons.length - 1), readings[0]]
-        return options.map(o => o.clean()).shuffle();
+        return options.map(o => o.clean().katakana()).shuffle();
     }
 
     answer() {
         return this.all[this.card].readings_on[0];
     }
 
+    cardHTML() {
+        return `<div style='font-size: .5em;margin-bottom: -0.8em;'>${this.all[this.card].meanings[0]}</div>
+            ${this.card}`;
+    }
     reveal() {
         super.reveal();
         const readings = this.all[this.card].readings_on.slice(1);

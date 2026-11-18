@@ -1,0 +1,49 @@
+@font-face {
+  font-family: "irohamaru mikami";
+  src: url("irohamaru mikami.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+}
+
+* {
+    font-family: 'irohamaru mikami';
+    font-size: 24px;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+body > div {
+    height; 100vh;
+}
+
+table {
+    border-spacing: 0;
+}
+
+tr:first-child {
+    height: 50px;
+}
+
+tbody::-webkit-scrollbar {
+    display: none
+}
+
+th {
+    position: sticky;
+    top: 0;
+    background-color: white;
+}
+
+td, th {
+    border: 1px solid black;
+    border-collapse: collapse;
+    padding: 0 10px;
+}
+
+td:first-child {
+    text-align: center;
+}
+
