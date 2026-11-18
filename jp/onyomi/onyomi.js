@@ -14,7 +14,8 @@ export class OnyomiQuiz extends Quiz {
         });
         this.allAnswers = new Set();
         Object.keys(data).forEach(k => {
-            data[k].readings_on.forEach(r => this.allAnswers.add(r.clean()));
+            this.allAnswers.add(data[k].readings_on[0].clean());
+//              data[k].readings_on.forEach(r => this.allAnswers.add(r.clean()));
         });
         return data;
     }
