@@ -34,7 +34,7 @@ export class OnyomiQuiz extends Quiz {
     }
 
     answer() {
-        return this.all[this.card].readings_on[0];
+        return this.all[this.card].readings_on[0].katakana();
     }
 
     cardHTML() {
